@@ -38,8 +38,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           messageSchema.parse(parsedMessage);
         } catch (err) {
-          const validationError = fromZodError(err);
-          sendErrorToClient(ws, 'Invalid message format', validationError.message);
+          if (err instanceof Error) {
+            const validationError = fromZodError(err as any);
+            sendErrorToClient(ws, 'Invalid message format', validationError.message);
+            return;
+          }
+          sendErrorToClient(ws, 'Invalid message format', 'Invalid request format');
           return;
         }
         
