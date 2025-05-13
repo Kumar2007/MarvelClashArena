@@ -117,6 +117,7 @@ interface GameContextType {
   sendMessage: (message: WebSocketMessage) => void;
   processCommand: (command: string) => Promise<void>;
   resetGameState: () => void;
+  connectionStatus: 'connecting' | 'connected' | 'disconnected';
 }
 
 const defaultGameState: GameState = {
@@ -143,7 +144,8 @@ export const GameContext = createContext<GameContextType>({
   gameState: defaultGameState,
   sendMessage: () => {},
   processCommand: async () => {},
-  resetGameState: () => {}
+  resetGameState: () => {},
+  connectionStatus: 'disconnected'
 });
 
 type GameProviderProps = {
@@ -503,7 +505,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <GameContext.Provider value={{ gameState, sendMessage, processCommand, resetGameState }}>
+    <GameContext.Provider value={{ gameState, sendMessage, processCommand, resetGameState, connectionStatus }}>
       {children}
     </GameContext.Provider>
   );

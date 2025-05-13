@@ -59,7 +59,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             break;
             
           case 'matchmaking:join':
-            handleJoinMatchmaking(ws, payload, matchmakingQueue);
+            handleJoinMatchmaking(ws, payload, matchmakingQueue, battleManager);
             break;
             
           case 'matchmaking:leave':
@@ -240,7 +240,7 @@ async function handleRegister(ws: WebSocket, payload: any) {
   }
 }
 
-async function handleJoinMatchmaking(ws: WebSocket, payload: any, matchmakingQueue: MatchmakingQueue) {
+async function handleJoinMatchmaking(ws: WebSocket, payload: any, matchmakingQueue: MatchmakingQueue, battleManager: BattleManager) {
   const clientInfo = clients.get(ws);
   
   if (!clientInfo || !clientInfo.userId) {
